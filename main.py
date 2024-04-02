@@ -2,8 +2,8 @@ from weather import Weather
 
 pogoda = Weather("Warszawa")
 print(pogoda.status)
-print(pogoda.json)
+#print(pogoda.json)
 
 
 #example of usage
-print(pogoda.day[1].temperature)
+print(pogoda.day[0].temperature_avg)

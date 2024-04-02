@@ -13,7 +13,7 @@ class Weather:
     res = requests.get(url)
     self.json = res.json()
     #tutaj dodac petle ktora utworzy tabele dni i przypisze im pogody
-    #self.days.append(Day("15"))
+    self.day.append(Day("42","42","42","42","42","42","42","42","42","42"))
     return res
 
 
