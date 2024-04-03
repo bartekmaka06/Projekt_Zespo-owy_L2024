@@ -1,9 +1,10 @@
 from weather import Weather
 
+
 pogoda = Weather("Warszawa")
-print(pogoda.status)
-#print(pogoda.json)
+#print(pogoda.status)
+#pogoda.refresh()
 
 
 #example of usage
-print(pogoda.day[0].temperature_avg)
+print(pogoda.day[0].description)
