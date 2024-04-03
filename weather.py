@@ -18,7 +18,6 @@ class Weather:
         presentday = date.today()
         res_dict = res.json()
         for i in range(0, len(res_dict["list"])):
-            # print(i)
             self.day.append(Day(str(presentday + timedelta(i)),
                                 res_dict["list"][i]["temp"]["day"],
                                 res_dict["list"][i]["temp"]["min"],
