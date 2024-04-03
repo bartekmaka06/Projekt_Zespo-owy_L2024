@@ -37,9 +37,6 @@ class Weather:
 
 
 class Day:
-  from_zone = tz.tzutc()
-  to_zone = tz.tzlocal()
-
   def __init__(self,date,temperature_avg,temperature_min,temperature_max,overall_icon,pressure,humidity,description,sunrise,
                sunset,wind_speed):
     self.date = date
