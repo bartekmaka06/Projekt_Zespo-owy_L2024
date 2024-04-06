@@ -9,15 +9,24 @@ class Weather:
         self.day = []
         self.city = city
         self.status = self.get_weather()
+        self.download_day_temp = ""
 
     def get_weather(self):
         API_KEY = '5cb00ebacb888af1ed92bedb4ce335d7'
-        url = f'https://pro.openweathermap.org/data/2.5/forecast/climate?q={self.city}&units=metric&appid={API_KEY}'
 
-        res = requests.get(url)
+        url_30 = f'https://pro.openweathermap.org/data/2.5/forecast/climate?q={self.city}&units=metric&appid={API_KEY}'
+        res_30 = requests.get(url_30)
+
+        url_now = f'https://api.openweathermap.org/data/2.5/weather?q={self.city}&units=metric&appid={API_KEY}'
+        res_now = requests.get(url_now)
+
         presentday = date.today()
-        res_dict = res.json()
+        res_dict = res_30.json()
+        res_dict_now = res_now.json()
+        self.download_day_temp = res_dict_now["main"]["temp"]
+
         for i in range(0, len(res_dict["list"])):
+
             self.day.append(Day(str(presentday + timedelta(i)),
                                 res_dict["list"][i]["temp"]["day"],
                                 res_dict["list"][i]["temp"]["min"],
@@ -30,7 +39,7 @@ class Weather:
                                 res_dict["list"][i]["sunset"],
                                 res_dict["list"][i]["speed"]))
 
-        return res
+        return res_30
 
     def refresh(self):
         self.day.clear()
