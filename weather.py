@@ -9,7 +9,7 @@ class Weather:
         self.day = []
         self.city = city
         self.status = self.get_weather()
-        self.download_day_temp = ""
+        self.download_day_temp = None
 
     def get_weather(self):
         API_KEY = '5cb00ebacb888af1ed92bedb4ce335d7'
@@ -23,6 +23,7 @@ class Weather:
         presentday = date.today()
         res_dict = res_30.json()
         res_dict_now = res_now.json()
+        print(res_dict_now["main"]["temp"])
         self.download_day_temp = res_dict_now["main"]["temp"]
 
         for i in range(0, len(res_dict["list"])):
