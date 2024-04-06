@@ -1,4 +1,4 @@
-from weather_copy import Weather
+from weather import Weather
 
 
 pogoda = Weather("Łódź")
