@@ -91,6 +91,7 @@ class Day:
                  description, sunrise,
                  sunset, wind_speed):
         self.date = date
+        self.download_date = download_date
         self.temperature_avg = temperature_avg
         self.temperature_min = temperature_min
         self.temperature_max = temperature_max
@@ -103,4 +104,4 @@ class Day:
         self.wind_speed = wind_speed
         self.sunrise = self.sunrise_utc.astimezone(tz.tzlocal()).strftime('%H:%M')
         self.sunset = self.sunset_utc.astimezone(tz.tzlocal()).strftime('%H:%M')
-        self.download_date = download_date
+

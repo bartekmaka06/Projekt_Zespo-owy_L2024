@@ -16,5 +16,7 @@ print(pogoda.status)
 print(pogoda.day[0].date)
 print(pogoda.day[0].download_date)
 print(pogoda.day[0].temperature_avg)
+print(pogoda.day[0].sunrise)
+print(pogoda.day[0].sunset)
 #pelna lista parametrow na dole pliku weather.py
 
