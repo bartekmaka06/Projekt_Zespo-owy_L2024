@@ -3,3 +3,4 @@
 Required:
  - python-dateutil
  - requests
+ - Pillow
