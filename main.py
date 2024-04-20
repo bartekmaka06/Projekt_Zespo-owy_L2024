@@ -22,9 +22,11 @@ def click_search_button():
 
 root = Tk()
 root.title('Weather App')
-root.geometry("700x500")
+root.geometry("700x550")
 
 frame_search = Frame(root)
+label_date = Label(frame_search, text="Last update: 2024-04-20 15:00", font=("Arial", 8) )
+label_date.pack()
 entry = Entry(frame_search, width=30)
 entry.pack(side="left")
 click_button = Button(frame_search, text="Search", width=8, command=click_search_button)
