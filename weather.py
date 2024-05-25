@@ -35,7 +35,7 @@ class Weather:
 
         url_30 = f'https://pro.openweathermap.org/data/2.5/forecast/climate?q={self.city}&units=metric&appid={API_KEY}'
         url_now = f'https://api.openweathermap.org/data/2.5/weather?q={self.city}&units=metric&appid={API_KEY}'
-
+        
 
         try:
             res_now = requests.get(url_now)
@@ -53,6 +53,7 @@ class Weather:
 
         for i in range(0, len(res_dict["list"])):
             if i == 0:
+                download_time = datetime.fromtimestamp(res_dict_now["dt"])
                 #pozmieniac aby dane aktualne byly brane z prognozy aktualnej
                 self.day.append(Day(str(presentday + timedelta(i)),
                                     download_time,
@@ -62,11 +63,13 @@ class Weather:
                                     res_dict_now["weather"][0]["icon"],
                                     res_dict_now["main"]["pressure"],
                                     res_dict_now["main"]["humidity"],
+                                    res_dict_now["clouds"]["all"],
                                     res_dict_now["weather"][0]["description"],
                                     res_dict_now["sys"]["sunrise"],
                                     res_dict_now["sys"]["sunset"],
                                     res_dict_now["wind"]["speed"]))
             else:
+                download_time = datetime.fromtimestamp(res_dict["list"][i]["dt"])
                 self.day.append(Day(str(presentday + timedelta(i)),
                                     download_time,
                                     res_dict["list"][i]["temp"]["day"],
@@ -75,6 +78,7 @@ class Weather:
                                     res_dict["list"][i]["weather"][0]["icon"],
                                     res_dict["list"][i]["pressure"],
                                     res_dict["list"][i]["humidity"],
+                                    res_dict["list"][i]["clouds"],
                                     res_dict["list"][i]["weather"][0]["description"],
                                     res_dict["list"][i]["sunrise"],
                                     res_dict["list"][i]["sunset"],
@@ -87,7 +91,7 @@ class Weather:
 
 class Day:
 
-    def __init__(self, date, download_date, temperature_avg, temperature_min, temperature_max, overall_icon, pressure, humidity,
+    def __init__(self, date, download_date, temperature_avg, temperature_min, temperature_max, overall_icon, pressure, humidity, clouds, 
                  description, sunrise,
                  sunset, wind_speed):
         self.date = date
@@ -98,6 +102,7 @@ class Day:
         self.overall_icon = overall_icon
         self.pressure = pressure
         self.humidity = humidity
+        self.clouds = clouds
         self.description = description
         self.sunrise_utc = datetime.utcfromtimestamp(sunrise).replace(tzinfo=tz.tzutc())
         self.sunset_utc = datetime.utcfromtimestamp(sunset).replace(tzinfo=tz.tzutc())
