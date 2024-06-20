@@ -33,9 +33,26 @@ def create_button_callback(button_nr):
 
 def click_day_button(nr):
     print("Selected: "+ str(nr))
-    print("Day: ", label_day_l[nr-1].cget("text"))
+    print("Day: ", label_day_l[nr-1].cget("text"), " temp: ", str(int(pogoda.day[nr-1].temperature_avg)))
+
+    image_weather_button = ImageTk.PhotoImage(get_and_resize_image(pogoda.day[nr-1].overall_icon, 200, 200))
+    label_photo.config(image=image_weather_button)
+    label_photo.image = image_weather_button  # Keep a reference to prevent image from being garbage collected
+
+    label_day.config(text=pogoda.day[nr-1].download_date.strftime("%A"))
+    label_avg_temp_day.config(text="Avg temp: " + str(int(pogoda.day[nr-1].temperature_avg)) + " °C")
+    label_min_max_temp.config(text="Min: " + str(int(pogoda.day[nr-1].temperature_min)) + " °C Max: " + str(int(pogoda.day[nr-1].temperature_max)) + " °C")
+    label_sunset.config(text="Sunset: " + str(pogoda.day[nr-1].sunset))
+    label_sunrise.config(text="Sunrise: " + str(pogoda.day[nr-1].sunrise))
+    label_weather_info.config(text=pogoda.day[nr-1].description.capitalize())
+    label_pressure.config(text="Pressure: " + str(pogoda.day[nr-1].pressure) + " hPa")
+    label_cloud.config(text="Cloudy: " + str(pogoda.day[nr-1].clouds) + "%")
+    label_wind.config(text="Wind: " + str(pogoda.day[nr-1].wind_speed) + " m/s")
+    label_air_humidity.config(text="Air humidity: " + str(pogoda.day[nr-1].humidity) + "%")
 
 def click_search_button():
+    global pogoda
+    global text_date
     city = entry.get()
     print("Search: " + city)
     # Update the pogoda variable with new weather data for the specified city
@@ -53,8 +70,8 @@ def update_gui_with_weather_data(pogoda):
     label_city.config(text=pogoda.city.capitalize())
     label_avg_temp_day.config(text="Avg temp: " + str(int(pogoda.day[0].temperature_avg)) + " °C")
     label_min_max_temp.config(text="Min: " + str(int(pogoda.day[0].temperature_min)) + " °C Max: " + str(int(pogoda.day[0].temperature_max)) + " °C")
-    label_sunset.config(text="Sunset: " + pogoda.day[0].sunset)
-    label_sunrise.config(text="Sunrise: " + pogoda.day[0].sunrise)
+    label_sunset.config(text="Sunset: " + str(pogoda.day[0].sunset))
+    label_sunrise.config(text="Sunrise: " + str(pogoda.day[0].sunrise))
     label_weather_info.config(text=pogoda.day[0].description.capitalize())
     label_pressure.config(text="Pressure: " + str(pogoda.day[0].pressure) + " hPa")
     label_cloud.config(text="Cloudy: " + str(pogoda.day[0].clouds) + "%")
@@ -66,17 +83,17 @@ def update_gui_with_weather_data(pogoda):
 
 def update_weather_images(pogoda):
     # Update the main weather image
-    image_weather = ImageTk.PhotoImage(get_and_resize_image(pogoda.day[0].overall_icon, 200, 200))
-    label_photo.config(image=image_weather)
-    label_photo.image = image_weather  # Keep a reference to prevent image from being garbage collected
+    image_weather_update = ImageTk.PhotoImage(get_and_resize_image(pogoda.day[0].overall_icon, 200, 200))
+    label_photo.config(image=image_weather_update)
+    label_photo.image = image_weather_update  # Keep a reference to prevent image from being garbage collected
 
     # Update the daily weather images
-    for i in range(1, 6):
-        image_day = ImageTk.PhotoImage(get_and_resize_image(pogoda.day[i].overall_icon, 60, 60))
-        label_photo_day_l[i - 1].config(image=image_day)
-        label_photo_day_l[i - 1].image = image_day  # Keep a reference to prevent image from being garbage collected
-        label_day_l[i - 1].config(text=pogoda.day[i].download_date.strftime("%A"))
-        label_avg_temp_day_l[i - 1].config(text=str(int(pogoda.day[i].temperature_avg)))
+    for i in range(0,5):
+        image_day_widget_update = ImageTk.PhotoImage(get_and_resize_image(pogoda.day[i].overall_icon, 60, 60))
+        label_photo_day_l[i].config(image=image_day_widget_update)
+        label_photo_day_l[i].image = image_day_widget_update  # Keep a reference to prevent image from being garbage collected
+        label_day_l[i].config(text=pogoda.day[i].download_date.strftime("%A"))
+        label_avg_temp_day_l[i].config(text=str(int(pogoda.day[i].temperature_avg)))
 
 root = Tk()
 root.title('Weather App')
@@ -143,9 +160,9 @@ label_avg_temp_day.pack()
 # label_avg_temp_night.pack()
 label_min_max_temp = Label(frame_info_left, text="Min: " + str(int(pogoda.day[0].temperature_min)) + " °C Max: " + str(int(pogoda.day[0].temperature_max)) + " °C", font=("Helvetica", 10), bg=bg_color)
 label_min_max_temp.pack()
-label_sunrise = Label(frame_info_left, text="Sunrise: " + pogoda.day[0].sunrise, font=("Helvetica", 10), bg=bg_color)
+label_sunrise = Label(frame_info_left, text="Sunrise: " + str(pogoda.day[0].sunrise), font=("Helvetica", 10), bg=bg_color)
 label_sunrise.pack()
-label_sunset = Label(frame_info_left, text="Sunset: " + pogoda.day[0].sunset, font=("Helvetica", 10), bg=bg_color)
+label_sunset = Label(frame_info_left, text="Sunset: " + str(pogoda.day[0].sunset), font=("Helvetica", 10), bg=bg_color)
 label_sunset.pack()
 frame_info_left.pack(side="left")
 
@@ -191,20 +208,20 @@ for i in range (1,6):
     if i<5:
         right_border_frame = Frame(frame_day, bg="lightgrey", width=1)
         right_border_frame.pack(side="right", fill="y", padx=5)
-    print("day name: " + pogoda.day[i].download_date.strftime("%A"))
-    label_day = Label(frame_day, text=pogoda.day[i].download_date.strftime("%A"), font=("Helvetica", 10), bg=bg_color)
-    label_day.pack()
-    label_day_l.append(label_day)
+    print("day name: " + pogoda.day[i-1].download_date.strftime("%A"))
+    label_day_widget = Label(frame_day, text=pogoda.day[i-1].download_date.strftime("%A"), font=("Helvetica", 10), bg=bg_color)
+    label_day_widget.pack()
+    label_day_l.append(label_day_widget)
 
-    image_day = ImageTk.PhotoImage(get_and_resize_image(pogoda.day[i].overall_icon,60,60), width=60, height=60)
-    image_day_l.append(image_day)
-    label_photo_day = Label(frame_day, image=image_day, bg=bg_color)
+    image_day_widget = ImageTk.PhotoImage(get_and_resize_image(pogoda.day[i-1].overall_icon,60,60), width=60, height=60)
+    image_day_l.append(image_day_widget)
+    label_photo_day = Label(frame_day, image=image_day_widget, bg=bg_color)
     label_photo_day.pack()
     label_photo_day_l.append(label_photo_day)
 
-    label_avg_temp_day = Label(frame_day, text=str(int(pogoda.day[i].temperature_avg)), font=("Helvetica", 10), bg=bg_color)
-    label_avg_temp_day.pack()
-    label_avg_temp_day_l.append(label_avg_temp_day)
+    label_avg_temp_day_widget = Label(frame_day, text=str(int(pogoda.day[i-1].temperature_avg)), font=("Helvetica", 10), bg=bg_color)
+    label_avg_temp_day_widget.pack()
+    label_avg_temp_day_l.append(label_avg_temp_day_widget)
 
     button_day = ttk.Button(frame_day, text="Select", style='Select.TButton', command=create_button_callback(i))
     button_day.pack()

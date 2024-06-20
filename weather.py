@@ -1,6 +1,6 @@
 import os
 import requests
-from datetime import date, timedelta, datetime
+from datetime import date, timedelta, datetime, timezone
 from dateutil import tz
 import pickle
 
@@ -54,6 +54,7 @@ class Weather:
         for i in range(0, len(res_dict["list"])):
             if i == 0:
                 download_time = datetime.fromtimestamp(res_dict_now["dt"])
+                tz = timezone(timedelta(seconds=res_dict_now["timezone"]))
                 #pozmieniac aby dane aktualne byly brane z prognozy aktualnej
                 self.day.append(Day(str(presentday + timedelta(i)),
                                     download_time,
@@ -67,9 +68,11 @@ class Weather:
                                     res_dict_now["weather"][0]["description"],
                                     res_dict_now["sys"]["sunrise"],
                                     res_dict_now["sys"]["sunset"],
+                                    tz,
                                     res_dict_now["wind"]["speed"]))
             else:
                 download_time = datetime.fromtimestamp(res_dict["list"][i]["dt"])
+                tz = timezone(timedelta(seconds=res_dict["city"]["timezone"]))
                 self.day.append(Day(str(presentday + timedelta(i)),
                                     download_time,
                                     res_dict["list"][i]["temp"]["day"],
@@ -82,6 +85,7 @@ class Weather:
                                     res_dict["list"][i]["weather"][0]["description"],
                                     res_dict["list"][i]["sunrise"],
                                     res_dict["list"][i]["sunset"],
+                                    tz,
                                     res_dict["list"][i]["speed"]))
 
         return "success"
@@ -93,7 +97,7 @@ class Day:
 
     def __init__(self, date, download_date, temperature_avg, temperature_min, temperature_max, overall_icon, pressure, humidity, clouds, 
                  description, sunrise,
-                 sunset, wind_speed):
+                 sunset, timezone, wind_speed):
         self.date = date
         self.download_date = download_date
         self.temperature_avg = temperature_avg
@@ -107,6 +111,6 @@ class Day:
         self.sunrise_utc = datetime.utcfromtimestamp(sunrise).replace(tzinfo=tz.tzutc())
         self.sunset_utc = datetime.utcfromtimestamp(sunset).replace(tzinfo=tz.tzutc())
         self.wind_speed = wind_speed
-        self.sunrise = self.sunrise_utc.astimezone(tz.tzlocal()).strftime('%H:%M')
-        self.sunset = self.sunset_utc.astimezone(tz.tzlocal()).strftime('%H:%M')
+        self.sunrise = self.sunrise_utc.astimezone(timezone).strftime('%H:%M')
+        self.sunset = self.sunset_utc.astimezone(timezone).strftime('%H:%M')
 
