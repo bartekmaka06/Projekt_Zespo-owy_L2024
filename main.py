@@ -55,15 +55,13 @@ def click_search_button():
     global text_date
     city = entry.get()
     print("Search: " + city)
-    # Update the pogoda variable with new weather data for the specified city
+    
     pogoda = Weather(city)
 
     # Update the labels and images in the GUI with the new weather data
     update_gui_with_weather_data(pogoda)
 
 def update_gui_with_weather_data(pogoda):
-    # Update the labels and images with the new weather data
-    # For example:
     label_date.config(text="Last update: " + pogoda.day[0].download_date.strftime("%Y-%m-%d %H:%M:%S"))
     print("label_day: " + pogoda.day[0].download_date.strftime("%A"))
     label_day.config(text=pogoda.day[0].download_date.strftime("%A"))
@@ -82,7 +80,6 @@ def update_gui_with_weather_data(pogoda):
     update_weather_images(pogoda)
 
 def update_weather_images(pogoda):
-    # Update the main weather image
     image_weather_update = ImageTk.PhotoImage(get_and_resize_image(pogoda.day[0].overall_icon, 200, 200))
     label_photo.config(image=image_weather_update)
     label_photo.image = image_weather_update  # Keep a reference to prevent image from being garbage collected
@@ -156,8 +153,6 @@ frame_center = Frame(root, bg=bg_color)
 frame_info_left = Frame(frame_center, bg=bg_color, width=180)
 label_avg_temp_day = Label(frame_info_left, text="Avg temp: " + str(int(pogoda.day[0].temperature_avg)) + " °C", font=("Helvetica", 10), bg=bg_color)
 label_avg_temp_day.pack()
-# label_avg_temp_night = Label(frame_info_left, text="Night: " + str(pogoda.temperature_min), font=30)
-# label_avg_temp_night.pack()
 label_min_max_temp = Label(frame_info_left, text="Min: " + str(int(pogoda.day[0].temperature_min)) + " °C Max: " + str(int(pogoda.day[0].temperature_max)) + " °C", font=("Helvetica", 10), bg=bg_color)
 label_min_max_temp.pack()
 label_sunrise = Label(frame_info_left, text="Sunrise: " + str(pogoda.day[0].sunrise), font=("Helvetica", 10), bg=bg_color)
@@ -175,8 +170,6 @@ label_photo.pack(side="left")
 frame_info_right = Frame(frame_center, bg=bg_color, width=180)
 label_pressure = Label(frame_info_right, text="Pressure: " + str(pogoda.day[0].pressure) + " hPa", font=("Helvetica", 10), bg=bg_color)
 label_pressure.pack()
-# label_rain = Label(frame_info_right, text="Rain: " + pogoda.rain, font=30)
-# label_rain.pack()
 label_cloud = Label(frame_info_right, text="Cloudy: " + str(pogoda.day[0].clouds) + "%", font=("Helvetica", 10), bg=bg_color)
 label_cloud.pack()
 label_wind = Label(frame_info_right, text="Wind: " + str(pogoda.day[0].wind_speed) + " m/s", font=("Helvetica", 10), bg=bg_color)
@@ -243,13 +236,3 @@ root.mainloop()
 
 #odswiezenie pogody, zwraca to samo co wyzej
 #pogoda.get_weather()
-
-
-#example of usage
-print(pogoda.status)
-print(pogoda.day[0].date)
-print(pogoda.day[0].download_date)
-print(pogoda.day[0].temperature_avg)
-print(pogoda.day[0].sunrise)
-print(pogoda.day[0].sunset)
-#pelna lista parametrow na dole pliku weather.py

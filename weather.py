@@ -55,7 +55,6 @@ class Weather:
             if i == 0:
                 download_time = datetime.fromtimestamp(res_dict_now["dt"])
                 tz = timezone(timedelta(seconds=res_dict_now["timezone"]))
-                #pozmieniac aby dane aktualne byly brane z prognozy aktualnej
                 self.day.append(Day(str(presentday + timedelta(i)),
                                     download_time,
                                     res_dict_now["main"]["temp"],
